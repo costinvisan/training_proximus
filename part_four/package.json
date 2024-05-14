@@ -12,7 +12,7 @@
     "type": "git",
     "url": "git+https://gitlab.com/codeboilerplates/nodejs.git"
   },
-  "author": "Alexandru Hogea",
+  "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://gitlab.com/codeboilerplates/nodejs/issues"
