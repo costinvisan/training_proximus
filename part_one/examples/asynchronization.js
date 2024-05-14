@@ -27,4 +27,3 @@ promises();
 
 console.log("---example for async and await---");
 asyncAndAwait();
-
