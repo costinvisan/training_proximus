@@ -1,0 +1,193 @@
+// function myFunc(x) {console.log(x)};
+ 
+// // este identic cu
+ 
+// const myFuncArrow = (x) => console.log(x);
+ 
+// myFunc(3); //3
+// myFuncArrow(3); //3
+
+//--------------------------------------------------------------------------
+
+// const constanta = 'abc';
+// let variabila = 3;
+ 
+// function adauga (x, y, z) {
+//   if (x === 'abc') {
+//     y = y + z;
+//   }
+//   return  y;
+// }
+ 
+// const rezultat = adauga(constanta, variabila, 10);
+ 
+// console.log(rezultat);
+
+//--------------------------------------------------------------------------
+
+// const a = 10; //a este numar
+// const b = '10'; //b este sir de caractere
+ 
+// console.log(a == b); //true
+// console.log(a === b); //false
+ 
+// const c = 'abc';
+// const d = 'abc';
+ 
+// console.log(c == d); //true
+// console.log(c === d); //true
+ 
+// const fals = false; //boolean
+// const str = ''; //string
+// const zero = 0; //number
+ 
+// console.log(fals == str); //true
+// console.log(fals == zero); //true
+// console.log(str == zero); //true
+ 
+// console.log(fals === str); //false
+// console.log(fals === zero); //false
+// console.log(str === zero); //false
+
+//--------------------------------------------------------------------------
+
+// const obj = {a:1, b:2}
+
+// console.log(obj.a)
+// console.log(obj['b'])
+
+//--------------------------------------------------------------------------
+
+// const obj1 = {a:2};
+// const obj2 = obj1; // copiere prin referinta
+ 
+// obj2.a = 1;
+// console.log(obj1); // {a:5} -> valoarea s-a modificat si in obiectul original
+ 
+// const obj3 = Object.assign({}, obj1); // copiere prin valoare
+ 
+// obj3.a = 10;
+// console.log(obj1); // {a:5} -> valoarea nu s-a modificat
+
+// console.log(obj1); // {a:5} -> valoarea nu s-a modificat
+
+//--------------------------------------------------------------------------
+
+// const arr = [1, 2, 3, 4];
+// console.log(arr.map(x => x*5)); //2 4 6 8
+ 
+// const obj = { a:2, b:3, c: (x, y) => console.log(x + y)}
+// console.log(obj.c(obj.a, obj['b'])); //5
+ 
+// const func1 = (x, cb) => cb(x);
+// const func2 = y => console.log(y);
+ 
+// func1(3, func2); //3
+
+//--------------------------------------------------------------------------
+
+// const getAgePromise = new Promise((resolve, reject) => {
+//     resolve(28);
+// });
+ 
+// getAgePromise.then((age) => {
+//     console.log(`My age is ${age}`)
+//     console.log('This is the second log')
+// });
+
+//--------------------------------------------------------------------------
+
+// const fs = require('fs');
+// const fsPromise = require('fs/promises');
+ 
+// const main = async () => {
+ 
+//     console.log('Voi citi continul fisierului sincron');
+ 
+//     const continutSincron = fs.readFileSync('./text.in');
+ 
+//     console.log(`Continutul sincron este: ${continutSincron}\n----------------\n`);
+ 
+//     console.log('Voi citi continul fisierului cu promisiune');
+ 
+//     let continutPromisiune = "NaN";
+ 
+//     fsPromise.readFile('text.in').then(continutPromisiune => console.log(`Continutul promisiune este: ${continutPromisiune}\n----------------\n`));
+ 
+//     console.log(`Continutul promisiune in afara promisiunii este: ${continutPromisiune}\n----------------\n`);
+ 
+//     console.log('Voi citi continul fisierului cu async await');
+ 
+//     let continutAsyncAwait = "NaN";
+ 
+//     continutAsyncAwait = await fsPromise.readFile('text.in');
+ 
+//     console.log(`Continutul async await este: ${continutAsyncAwait}\n----------------\n`);
+// }
+ 
+// main();
+
+//------------------------------SCRIPTS--------------------------------------------
+
+// const text = "Hello world!"
+// console.log(text)
+
+//------------------------------SCRIPTS--------------------------------------------
+
+// const date = new Date()
+
+// const year = date.getFullYear();
+// const month = date.getMonth() + 1;
+// const day = date.getDate();
+// const hours = date.getHours();
+// const minutes = date.getMinutes();
+// const seconds = date.getSeconds();
+
+// // Formatăm data și ora într-un șir de caractere
+// const formattedDate = `${year}-${month}-${day}`;
+// const formattedTime = `${hours}:${minutes}:${seconds}`;
+
+// // Afișăm data și ora
+// console.log("Data curentă:", formattedDate);
+// console.log("Ora curentă:", formattedTime);
+
+//------------------------------SCRIPTS--------------------------------------------
+
+//Creati un script care populeaza un vector cu numere de la 0 la 100 si afiseaza doar numerele pare
+
+// const x = []
+// let y = 0
+
+// while(y<=100){
+//     x.push(y)
+//     y=y+1;
+// }
+
+// console.log(x)
+
+// const valoriPare = x.filter(numar => numar%2===0)
+
+// console.log(valoriPare)
+
+//------------------------------SCRIPTS--------------------------------------------
+
+//Extindeti scriptul precedent si creati o functie care primeste 
+//ca parametru vectorul, un numar cu rol de index si o alta functie care afiseaza numarul aflat la pozitia index din vector
+
+const x = []
+let y = 0
+const z = 16
+while(y<=100){
+    x.push(y)
+    y=y+1;
+}
+
+function pozitieIndex(vector, index){
+    console.log(vector[index])
+}
+
+function task(x, z, functieIndex){
+    functieIndex(x, z)
+}
+
+task(x, z, pozitieIndex)
