@@ -620,16 +620,16 @@ Pentru a folosi o ruta definita cu un obiect router, este nevoie ca obiectul sa 
 Trebuie sa implementati o mica librarie sub forma unui REST Api care implementeaza operatiile CRUD (Create, Read, Update, Delete) pentru 
 <a href="https://github.com/costinvisan/training_proximus/blob/main/part_three/db/database.js">“baza de date”</a> aflata in cod:
 
-O ruta pentru inserarea unei carti
-O ruta pentru afisarea unei carti dupa id dat ca parametru de cale
-O ruta pentru afisarea unei carti dupa autor dat ca parametru de cerere
-O ruta pentru afisarea tuturor cartilor
-O ruta pentru actualizarea unei carti dupa id
-O ruta pentru stergerea unei carti dupa id dat ca parametru de cale
-O ruta pentru stergerea mai multor carti dupa autor dat ca parametru de cerere 
-O ruta pentru stergerea intregii baze de date
-Rutele trebuie definite intr-un ruter extern
-Rutele de inserare si actualizare vor opera pe JSON, deci trebuie sa activati parasarea de JSON
+- O ruta pentru inserarea unei carti
+- O ruta pentru afisarea unei carti dupa id dat ca parametru de cale
+- O ruta pentru afisarea unei carti dupa autor dat ca parametru de cerere
+- O ruta pentru afisarea tuturor cartilor
+- O ruta pentru actualizarea unei carti dupa id
+- O ruta pentru stergerea unei carti dupa id dat ca parametru de cale
+- O ruta pentru stergerea mai multor carti dupa autor dat ca parametru de cerere 
+- O ruta pentru stergerea intregii baze de date
+- Rutele trebuie definite intr-un ruter extern
+- Rutele de inserare si actualizare vor opera pe JSON, deci trebuie sa activati parasarea de JSON
 
 > [!TIP]
 > Hint! middleware express.json()
