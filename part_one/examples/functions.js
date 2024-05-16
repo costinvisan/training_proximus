@@ -28,3 +28,5 @@ simpleExampleFunction();
 
 console.log("---no need for main function example---");
 noNeedForMain();
+
+//test
