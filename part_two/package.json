@@ -1,0 +1,15 @@
+{
+  "name": "part_two",
+  "version": "1.0.0",
+  "main": "start.js",
+  "private": true,
+  "scripts": {
+    "start": "node start.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "~4.16.1"
+  }
+}
