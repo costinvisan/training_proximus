@@ -11,7 +11,6 @@ const addAsync = async (first_name, last_name) => {
 
 const getAllAsync = async () => {
     console.info(`Getting all authors from database async...`);
-
     return await queryAsync('SELECT * FROM authors');
 };
 
@@ -22,6 +21,29 @@ const getByIdAsync = async (id) => {
     return authors[0];
 };
 
+const getByIdAllDetailsAsync = async (id) => {
+    console.info(`Getting the author details with id ${id} from database async...`);
+
+    const authorDetails = await queryAsync(
+        `
+         SELECT
+          b.id AS book_id, b.name AS book_name,
+          p.id AS publisher_id, p.name AS publisher_name
+        FROM
+          authors a
+        JOIN
+          books b ON a.id = b.author_id
+        LEFT JOIN
+          publishers_books pb ON b.id = pb.book_id
+        LEFT JOIN
+          publishers p ON pb.publisher_id = p.id
+        WHERE
+          a.id = $1;
+      `, [id]);
+    return authorDetails;
+};
+
+
 const updateByIdAsync = async (id, first_name, last_name) => {
     console.info(`Updating the author with id ${id} from database async...`);
 
@@ -29,18 +51,20 @@ const updateByIdAsync = async (id, first_name, last_name) => {
     return authors[0];
 };
 
+
 const deleteByIdAsync = async (id) => {
     console.info(`Deleting the author with id ${id} from database async...`);
 
     const authors = await queryAsync('DELETE FROM authors WHERE id = $1 RETURNING *', [id]);
-    return authors[0];
-    
+    return authors[0];  
 };
+
 
 module.exports = {
     addAsync,
     getAllAsync,
     getByIdAsync,
+    getByIdAllDetailsAsync,
     updateByIdAsync,
     deleteByIdAsync
 }

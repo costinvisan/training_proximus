@@ -23,6 +23,7 @@ class AuthorPostBody {
     }
 }
 
+
 class AuthorPutBody extends AuthorPostBody {
     constructor (body, id) {
         super(body);
@@ -38,6 +39,7 @@ class AuthorPutBody extends AuthorPostBody {
     }
 }
 
+
 class AuthorResponse {
     constructor(author) {
         this.firstName = author.first_name;
@@ -46,8 +48,24 @@ class AuthorResponse {
     }
 }
 
+
+class AuthorAllDetails{
+    constructor(author) {
+        this.books = author.map(row => ({
+            id: row.book_id,
+            name: row.book_name,
+            publisher: {
+                id: row.publisher_id,
+                name: row.publisher_name,
+            }
+          }));
+        }
+}
+
+
 module.exports =  {
     AuthorPostBody,
     AuthorPutBody,
-    AuthorResponse
+    AuthorResponse,
+    AuthorAllDetails
 }
