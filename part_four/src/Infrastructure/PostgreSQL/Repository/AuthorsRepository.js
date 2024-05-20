@@ -22,6 +22,30 @@ const getByIdAsync = async (id) => {
     return authors[0];
 };
 
+const getBooksByIdAsync = async (id) => {
+    console.info(`Getting the books by the author with id ${id} from database async...`);
+
+    const authorBooks = await queryAsync(
+        `SELECT 
+            a.id AS author_id,
+            b.id AS book_id,
+            b.name AS book_name,
+            p.id AS publisher_id,
+            p.name AS publisher_name
+        FROM 
+            authors a
+        JOIN
+            books b ON a.id = b.author_id
+        LEFT JOIN
+            publishers_books pb ON b.id = pb.book_id
+        LEFT JOIN
+            publishers p ON pb.publisher_id = p.id
+        WHERE
+            a.id = $1`
+    , [id]);
+    return authorBooks;
+}
+
 const updateByIdAsync = async (id, first_name, last_name) => {
     console.info(`Updating the author with id ${id} from database async...`);
 
@@ -41,6 +65,7 @@ module.exports = {
     addAsync,
     getAllAsync,
     getByIdAsync,
+    getBooksByIdAsync,
     updateByIdAsync,
     deleteByIdAsync
 }

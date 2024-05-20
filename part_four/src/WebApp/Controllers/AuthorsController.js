@@ -2,7 +2,7 @@ const express = require('express');
 
 const AuthorsRepository = require('../../Infrastructure/PostgreSQL/Repository/AuthorsRepository.js');
 const ServerError = require('../Models/ServerError.js');
-const { AuthorPostBody, AuthorPutBody, AuthorResponse } = require('../Models/Author.js');
+const { AuthorPostBody, AuthorPutBody, AuthorResponse, AuthorBooksResponse } = require('../Models/Author.js');
 
 const ResponseFilter = require('../Filters/ResponseFilter.js');
 
@@ -24,6 +24,26 @@ Router.get('/', async (req, res) => {
     ResponseFilter.setResponseDetails(res, 200, authors.map(author => new AuthorResponse(author)));
 });
 
+Router.get('/:id/books', async (req, res) => {
+    let {
+        id
+    } = req.params;
+
+    id = parseInt(id);
+
+    if (!id || id < 1) {
+        throw new ServerError("Id should be a positive integer", 400);
+    }
+
+    const authorBooks = await AuthorsRepository.getBooksByIdAsync(id);
+    
+    if (!authorBooks) {
+        throw new ServerError(`Author with id ${id} does not exist!`, 404);
+    }
+
+    ResponseFilter.setResponseDetails(res, 200, new AuthorBooksResponse(authorBooks));
+});
+
 Router.get('/:id', async (req, res) => {
     let {
         id
@@ -34,7 +54,7 @@ Router.get('/:id', async (req, res) => {
     if (!id || id < 1) {
         throw new ServerError("Id should be a positive integer", 400);
     }
-       
+
     const author = await AuthorsRepository.getByIdAsync(id);
     
     if (!author) {
@@ -73,6 +93,10 @@ Router.delete('/:id', async (req, res) => {
     }
 
     ResponseFilter.setResponseDetails(res, 204, "Entity deleted succesfully");
+});
+
+Router.get('/authors/:id/books', async (req, res) => {
+    // TODO: a returna id-ul si numele cartilor pentru autorul cu id-ul :id, impreuna cu id-ul si numele editurii/editurilor pentru fiecare carte
 });
 
 module.exports = Router;

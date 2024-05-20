@@ -46,8 +46,23 @@ class AuthorResponse {
     }
 }
 
+class AuthorBooksResponse {
+    constructor(author) {
+        this.id = author[0].author_id;
+        this.books = author.map(row => ({
+            id: row.book_id,
+            name: row.book_name,
+            publisher: {
+                id: row.publisher_id,
+                name: row.publisher_name,
+            }
+        }));
+    }
+}
+
 module.exports =  {
     AuthorPostBody,
     AuthorPutBody,
-    AuthorResponse
+    AuthorResponse,
+    AuthorBooksResponse
 }
