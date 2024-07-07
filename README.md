@@ -35,7 +35,16 @@ Table of contents
        * [Variabile de Mediu](#variabile-de-mediu)
        * [Gestionarea Erorilor](#gestionarea-erorilor)
        * [Async Await si Express](#async-await-si-express)
-     * [Probleme 4](#probleme-4)
+     * [Probleme 4](#probleme-4)\
+   * [Part 5](#part-5)
+     * [Autentificare](#autentificare)
+     * [Autorizare](#autorizare)
+     * [JWT Token in NodeJS si Express](#jwt-token-in-nodejs-si-express)
+     * [Configurare](configurare)
+       * [Biblioteci utilizate](biblioteci-utilizate)
+       * [Mediul de Lucru](mediul-de-lucru)
+     * [Probleme 5](probleme-5)
+
 
      
 ## Part One
@@ -841,3 +850,106 @@ Pentru BooksPublishers:
 
 Pentru Authors
 - GET /authors/:id/books → va returna id-ul si numele cartilor pentru autorul cu id-ul :id, impreuna cu id-ul si numele editurii/editurilor pentru fiecare carte
+
+
+## Part 5
+
+### Autentificare
+
+Autentificarea se refera la procesul prin care o entitate isi dovedeste identitatea in contextul unui sistem. Autentificarea se poate realiza prin multe moduri: introducere de pin, desenare de model, username si parola, date biometrice, etc…
+
+In cazul nostru, vom defini identitatea utilizatorului prin doua campuri username si password.
+
+> [!TIP]
+> In baza de date, parola este stocata criptat. Asadar, atunci cand inregistrati un utilizator, parola acestuia trebuie criptata. Atunci cand se autentifica, parola trebuie verificata cu cea din baza de date. In schelet aveti cele doua functii pentru lucru cu parole
+
+### Autorizare
+
+Autorizarea se refera la procesul prin care o entitate poate accesa o resursa pe baza rolului sau alocat in sistem. Autorizarea are sens atunci cand anumite resurse din sistem sunt accesibile in functie de permisiuni.
+
+In cazul nostru, vom defini trei roluri:
+
+- administratorul (ADMIN), care va putea face orice operatie de tip CRUD
+- managerul (MANAGER), care va putea face operatii CRUD doar pe resursele bibliotecii, cele implementate in scheletul trecut
+- utilizatorul (USER), care va putea face doar R (read)pe resursele bibliotecii
+
+  Tokenurile Web JWT sunt un standard deschis, descris in RFC 7519. Acestea reprezinta o incapsulare a unui set de informatii, care sunt codificate si semnate de catre server si trimise la client pentru utilizari ulterioare.
+  ![image](https://github.com/costinvisan/training_proximus/assets/45972193/2211dea8-b8b7-436c-895b-d3edea6acc5d)
+
+  Avantajul major al tokenului JWT consta in verificarea integritatii: Informatiile codificate sunt semnate (hashuite), iar semnatura este atasata la finalul tokenului. Atunci cand serverul primeste tokenul, acesta re-semneaza informatiile codificate si compara rezultatul cu hashul atasat. Daca cele doua semnaturi difera, tokenul este considerat invalid. In plus, spre deosebire de cookies, care se trimit implicit la fiecare request, clientul trebuie sa stie cand sa trimita token-ul JWT catre server, in header. Token-ul se trimite in header-ul cererilor care acceseaza resurse protejate.
+
+De obicei, token-urile JWT se folosesc in contextul unui framework de securitate web complex, precum OAuth2 si OpenID Connect, insa, pentru simplitate, ne vom rezuma la urmatorul flow:
+![image](https://github.com/costinvisan/training_proximus/assets/45972193/86119a60-27cc-4042-9146-166e90217c30)
+
+> [!TIP]
+> Intotdeauna, cand lucrati cu JWT si resurse protejate, tokenul trebuie inclus in Authorization header in cererea catre backend
+
+In token vom include urmatoarele informatii:
+
+- userId - pentru a sti despre ce utilizator e vorba
+- userRole - pentru a sti ce rol are utilizatorul care a efectuat cererea
+
+> [!WARNING]
+> Daca nu includeti tokenul in Authorization header, serverul trebuie sa intoarca 403 Forbidden
+> Daca includeti tokenul in Authorization header, dar rolul din token nu are permisiuni pentru cererea respectiva, serverul trebuie sa intoarca 401 Unauthorized
+
+
+### JWT Token in NodeJS si Express
+
+Express se bazeaza pe middlewares. Pentru a lucra cu JWT, este nevoie de 3 lucruri:
+
+- Logica de generare token JWT la autentificare
+- Middleware de extragere token din headerul cererii, de validare token si de returnare informatie decriptata
+- Middleware de verificare si validare rol
+
+Middlewares vor fi atasate rutelor care trebuie protejate. Exemplu:
+
+```js
+router.get('/rutaProtejataPentruAdmin', authorizeAndExtractTokenAsync, authorizeRoles('ADMIN'), async (req, res, next) => {
+  // do smth
+});
+ 
+router.get('/rutaProtejataPentruAdminSiUser', authorizeAndExtractTokenAsync, authorizeRoles('ADMIN', 'USER'), async (req, res, next) => {
+  // do smth
+});
+```
+
+> [!TIP]
+> Ramane la latitudinea voastra daca vreti sa separati logica de extragere, validare token si de verificare rol in 2 middlewares sau nu. Ele, bineinteles, pot fi comprimate si in cadrul unui singur middleware.
+
+### Configurare
+
+Peste ce am facut data trecuta va trebui sa adaugam sistemul de autentificare si autorizare.
+
+2 tabele noi adaugate:
+
+![image](https://github.com/costinvisan/training_proximus/assets/45972193/5c2e7eb4-1fe6-46d9-a4e4-dbd368f6249a)
+
+#### Biblioteci utilizate
+In NodeJS, cele mai folosite 2 biblioteci pentru lucrul cu JWT sunt jsonwebtoken si Passport JWT.
+
+Utilizati biblioteca de baza, jsonwebtoken, intrucat este simplu de utilizat si nu ofera nicio functionalitate out-of-the-box. Passport este considerat framework, deci implicit vine cu un bagaj de documentatie considerabil.
+
+Pentru partea de criptare de parole, folosim biblioteca Bcryptjs, o implementare scrisa in JS pur a bibliotecii consacrate Bcrypt
+
+Scheletul vine in completarea scheletului trecut.
+
+O sectiune noua de proiect, WebCore care inglobeaza functionalitatile ce tin de de securitate si user management. In plus controllere, repository-uri, filtre si modele noi pentru partea de utilizatori si roluri.
+
+#### Mediul de Lucru
+Mediul de lucru ramane identic, pe baza de Docker si Docker Compose.
+
+> [!TIP]
+> Ca sa fiti siguri ca nu aveti probleme cu datele, executati comanda docker system prune –volumes
+
+### Probleme 5
+
+Trebuie sa implementati logica de Inregistrare, Autentificare si Autorizare pentru endpointurile create in scheletul trecut. Pentru scheletul curent, veti avea TODO-uri puse in cod. Pentru ce ati rezolvat data trecuta, trebuie sa aplicati autorizarea in functie de roluri, conform enuntului:
+
+ - administrator - are voie sa faca orice
+ - manager - are voie sa faca orice doar pe resursele din scheletul trecut (cele care tin de carti, autori si edituri)
+ - user - are voie doar sa execute read pe resursele din scheletul trecut
+
+> [!TIP]
+> Aveti deja un administrator creat, odata cu pornirea bazei de date din docker, cu credentialele admin admin
+
