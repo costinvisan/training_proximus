@@ -40,10 +40,10 @@ Table of contents
      * [Autentificare](#autentificare)
      * [Autorizare](#autorizare)
      * [JWT Token in NodeJS si Express](#jwt-token-in-nodejs-si-express)
-     * [Configurare](configurare)
-       * [Biblioteci utilizate](biblioteci-utilizate)
-       * [Mediul de Lucru](mediul-de-lucru)
-     * [Probleme 5](probleme-5)
+     * [Configurare](#configurare)
+       * [Biblioteci utilizate](#biblioteci-utilizate)
+       * [Mediul de Lucru](#mediul-de-lucru)
+     * [Probleme 5](#probleme-5)
 
 
      
